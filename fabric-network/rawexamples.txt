@@ -1,0 +1,38 @@
+$ ../bin/peer chaincode invoke -o 127.0.0.1:6050 -C mychannel -n basic -c '{"Args":["CreateCourse","Filozofia","[123456, 654321, 272513]"]}' --waitForEvent --tls --cafile "${PWD}"/crypto-config/ordererOrganizations/uni.edu/orderers/orderer.uni.edu/tls/ca.crt
+2025-12-01 22:35:54.471 CET 0001 INFO [chaincodeCmd] ClientWait -> txid [a911c099f7e8fae17a5f14deb24931766372a2838291912e17ccd12e5c32a38f] committed with status (VALID) at 127.0.0.1:7055
+2025-12-01 22:35:54.471 CET 0002 INFO [chaincodeCmd] chaincodeInvokeOrQuery -> Chaincode invoke successful. result: status:200 payload:"{\"courseID\":\"5834c4fb0c201ab20baaff40b40e8c91c1eaa06bdbd4d5c2b45a0a5449bdccf1\",\"courseMap\":{\"f6abbc5244d86615785d733f62b94cdd71c54e559fd7577685c7e04d735e634a\":\"\",\"f400b9d5db323a9af996ce43472b21e0926c5fc6e7b42e2776a72107b38ead3e\":\"\",\"0beecb69f6b07b339098d3ea8192f5bdd28fb2e1684e0b9d743e145e61c77b76\":\"\"}}"
+
+$ ../bin/peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllCourses"]}'
+[
+  {
+    "courseID": "5834c4fb0c201ab20baaff40b40e8c91c1eaa06bdbd4d5c2b45a0a5449bdccf1",
+    "courseMap": {
+      "f6abbc5244d86615785d733f62b94cdd71c54e559fd7577685c7e04d735e634a": "",
+      "f400b9d5db323a9af996ce43472b21e0926c5fc6e7b42e2776a72107b38ead3e": "",
+      "0beecb69f6b07b339098d3ea8192f5bdd28fb2e1684e0b9d743e145e61c77b76": ""
+    }
+  }
+]
+
+$ ../bin/peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllFeedbacks"]}' | jq
+[
+  {
+    "course": "Filozofia",
+    "feedbackID": "f6abbc5244d86615785d733f62b94cdd71c54e559fd7577685c7e04d735e634a",
+    "opinion": "H4sIAAAAAAAA/3P0dXEHAOWgAwYEAAAA",
+    "professor": "Giovanni Reale",
+    "timestamp": "2025-12-01-22:39:40.685"
+  }
+]
+
+$ ../bin/peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllCourses"]}' | jq
+[
+  {
+    "courseID": "5834c4fb0c201ab20baaff40b40e8c91c1eaa06bdbd4d5c2b45a0a5449bdccf1",
+    "courseMap": {
+      "f6abbc5244d86615785d733f62b94cdd71c54e559fd7577685c7e04d735e634a": "8c751e6085714ad0354bcd80c628d09152aabd920f17d1b62be16e83b52e32ef",
+      "f400b9d5db323a9af996ce43472b21e0926c5fc6e7b42e2776a72107b38ead3e": "",
+      "0beecb69f6b07b339098d3ea8192f5bdd28fb2e1684e0b9d743e145e61c77b76": ""
+    }
+  }
+]
